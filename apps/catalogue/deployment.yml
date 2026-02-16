@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: catalogue
+  namespace: mogambo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: catalogue
+  template:
+    metadata:
+      labels:
+        app: catalogue
+    spec:
+      containers:
+        - name: catalogue
+          image: mohamedadel9988/catalogue:latest
+          ports:
+            - containerPort: 8081
+          env:
+            - name: DATABASE_HOST
+              value: "catalogue-db"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: catalogue
+  namespace: mogambo
+spec:
+  selector:
+    app: catalogue
+  ports:
+    - port: 80
+      targetPort: 8081
+  type: ClusterIP
